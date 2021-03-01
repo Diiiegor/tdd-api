@@ -71,8 +71,8 @@ class PostControllerTest extends TestCase
     public function test_404_update()
     {
         $nuevo_titulo = 'nuevo titulo' . time();
-        $response = $this->json('PUT', '/api/posts/1000',[
-            'title'=>$nuevo_titulo
+        $response = $this->json('PUT', '/api/posts/1000', [
+            'title' => $nuevo_titulo
         ]);
         $response->assertStatus(404);
     }
@@ -81,12 +81,24 @@ class PostControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $post = Post::factory()->create();
-        $response = $this->json('DELETE',"/api/posts/$post->id");
+        $response = $this->json('DELETE', "/api/posts/$post->id");
 
         $response->assertSee(null)
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('posts', ['id' => $post->id]);
+    }
+
+    public function test_index()
+    {
+        $posts = Post::factory(5)->create();
+        $response = $this->json('GET', '/api/posts');
+        $response->assertJsonStructure([
+            'data' => [
+                '*' => ['id', 'title', 'created_at', 'updated_at']
+            ]
+        ])
+            ->assertStatus(200);
     }
 
 }

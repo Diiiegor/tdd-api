@@ -25,7 +25,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json($this->post->paginate(),200);
     }
 
     /**
@@ -73,6 +73,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return response()->json(null,204);
+        return response()->json(null, 204);
     }
 }
