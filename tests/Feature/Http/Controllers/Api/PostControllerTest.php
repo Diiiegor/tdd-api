@@ -12,6 +12,7 @@ class PostControllerTest extends TestCase
 
     public function test_store()
     {
+        $this->withoutExceptionHandling();
         $response = $this->json('POST', '/api/posts', [
             'title' => 'test post',
 
